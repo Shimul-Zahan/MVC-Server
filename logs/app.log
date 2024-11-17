@@ -1,1 +1,2 @@
 {"level":"\u001b[31merror\u001b[39m","message":"Server running at 8000","timestamp":"2024-11-14 21:07:29"}
+{"level":"\u001b[31merror\u001b[39m","message":"Mongodb connection error: Error: querySrv ETIMEOUT _mongodb._tcp.shimulclaster1.85diumq.mongodb.net","timestamp":"2024-11-17 23:57:39"}

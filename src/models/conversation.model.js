@@ -23,7 +23,7 @@ const conversationalSchema = mongoose.Schema({
     ],
 
     // for track the last message
-    lastestMessage: {
+    latestMessage: {
         type: ObjectId,
         ref: "MessageModel",
     },
