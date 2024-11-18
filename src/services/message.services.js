@@ -60,4 +60,23 @@ const latestMessage = async (convo_id, message) => {
     }
 }
 
-module.exports = { createMessage, populateMessage, latestMessage }
+const getMessages = async (id) => {
+    try {
+        const messages = await MessageModel.find({ conversation: id })
+            .populate({
+                path: 'sender',
+                select: 'name email image status'
+            })
+            .populate('conversation')
+
+        if (!messages) throw createHttpError.BadRequest("Something went wromg")
+
+        return messages
+
+    } catch (error) {
+        throw createHttpError.BadRequest("Unable to process message data.")
+    }
+}
+
+
+module.exports = { createMessage, populateMessage, latestMessage, getMessages }

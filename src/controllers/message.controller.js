@@ -1,4 +1,5 @@
-const { createMessage, populateMessage, latestMessage } = require("../services/message.services");
+const createHttpError = require("http-errors");
+const { createMessage, populateMessage, latestMessage, getMessages } = require("../services/message.services");
 
 const sendMessage = async (req, res, next) => {
     try {
@@ -33,7 +34,13 @@ const sendMessage = async (req, res, next) => {
 
 const getMessage = async (req, res, next) => {
     try {
-        res.send("Get Messages")
+        const convo_id = req.params.convo_id
+        if (!convo_id) throw createHttpError.BadRequest("Unable to process...")
+
+        const messages = await getMessages(convo_id)
+
+        res.json(messages)
+
     } catch (error) {
         next(error)
     }
