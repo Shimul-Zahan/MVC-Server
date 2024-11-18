@@ -3,10 +3,23 @@ const validator = require('validator')
 const { ObjectId } = mongoose.Schema.Types
 
 const messageScheme = mongoose.Schema({
+
     sender: {
+        // already in userlist so we only store the objectId
         type: ObjectId,
         ref: "UserModel",
     },
+    message: {
+        // already in userlist so we only store the objectId
+        type: String,
+        trim: true
+    },
+    conversation: {
+        // for search any conversation
+        type: ObjectId,
+        ref: "ConversationModel",
+    },
+    files: [],
 },
     {
         collection: "messages",
@@ -14,6 +27,6 @@ const messageScheme = mongoose.Schema({
     },
 )
 
-const UserModel = mongoose.model("UserModel", userScheme)
+const messageModel = mongoose.models.MessageModel || mongoose.model("UserModel", messageModel)
 
-module.exports = UserModel
+module.exports = messageModel
