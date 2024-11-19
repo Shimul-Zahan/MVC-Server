@@ -35,13 +35,13 @@ const register = async (req, res, next) => {
 
         res.status(201).json({
             message: "register sucess. ",
-            access_token,
             user: {
                 _id: newUser._id,
                 name: newUser.name,
                 email: newUser.email,
                 image: newUser.image,
                 status: newUser.status,
+                access_token,
             }
         })
 
@@ -82,13 +82,13 @@ const login = async (req, res, next) => {
 
         res.status(201).json({
             message: "login sucess. ",
-            access_token,
             user: {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
                 image: user.image,
                 status: user.status,
+                access_token,
             }
         })
     } catch (error) {
@@ -141,13 +141,13 @@ const refreshToken = async (req, res, next) => {
 
         res.status(201).json({
             message: "login sucess. ",
-            access_token,
             user: {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
                 image: user.image,
                 status: user.status,
+                access_token,
             }
         })
 
