@@ -29,6 +29,7 @@ const create_open_conversation = async (req, res, next) => {
             let convoData = {
                 // convo name here
                 name: recevier.name,
+                picture: recevier?.image,
                 isGroup: false,
                 users: [sender_id, receiver_id]
             }
@@ -63,14 +64,12 @@ const getAllConversationForAUser = async (req, res, next) => {
     try {
         console.log("Hello from get all convo route");
         const user_id = req.user.userId
+        // console.log(user_id);
         const conversations = await getuserConversations(user_id)
-        
         res.json(conversations)
 
     } catch (error) {
-
         next(error)
-
     }
 
 }
