@@ -7,6 +7,11 @@ const conversationalSchema = mongoose.Schema({
         required: true,
         trim: true
     },
+    // if group then add group image
+    picture: {
+        type: String,
+        required: true
+    },
     // define is group chat or not
     isGroup: {
         type: Boolean,
