@@ -10,3 +10,4 @@
 {"level":"\u001b[31merror\u001b[39m","message":"Please provide a receiver id","timestamp":"2024-12-04 15:09:42"}
 {"level":"\u001b[31merror\u001b[39m","message":"Please provide a receiver id","timestamp":"2024-12-04 15:10:22"}
 {"level":"\u001b[31merror\u001b[39m","message":"Please provide a receiver id","timestamp":"2024-12-04 15:10:50"}
+{"level":"\u001b[31merror\u001b[39m","message":"Mongodb connection error: MongoNetworkError: connect ETIMEDOUT 52.86.39.98:27017","timestamp":"2024-12-05 16:47:25"}
