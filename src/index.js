@@ -1,7 +1,9 @@
 const app = require('./app');
-require('dotenv').config()
+const { Server } = require("socket.io")
 const logger = require('./configs/logger.config');
 const mongoose = require('mongoose')
+const SocketServer = require("./SocketServer")
+require('dotenv').config()
 
 
 const port = process.env.PORT || 5000;
@@ -28,7 +30,21 @@ mongoose.connect(mongoURL, {
 //     mongoose.set("debug", true)
 // }
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     // console.log(mongoURL);
     logger.info(`Server running at ${port}...`);
 });
+
+
+// Initialize Socket.IO with the server
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
+
+io.on("connection", (socket) => {
+    logger.info("Socket io connected successfully", socket)
+    SocketServer(socket, io)
+})
