@@ -22,12 +22,15 @@ const SocketServer = (socket, io) => {
 
     // join a conversation room
     socket.on('join conversation', (conversation) => {
+        console.log(conversation);
         socket.join(conversation)
     })
 
     // send and received message
     socket.on('send message', (message) => {
+        console.log(message, "with files here");
         let conversation = message.conversation;
+        console.log(conversation);
         if (!conversation.users) return;
         conversation.users.forEach(user => {
             if (user._id === message.sender._id) return;
