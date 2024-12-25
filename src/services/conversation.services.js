@@ -15,17 +15,6 @@ const doesConversationExist = async (sender_id, receiver_id) => {
         .populate("users", '-password')
         .populate("latestMessage")
 
-    // .populate("users", '-password')          // Populate user details excluding password
-    // .populate({
-    //     path: 'latestMessage',                // Populate latest message
-    //     populate: {
-    //         path: 'sender',                   // Populate sender details inside latestMessage
-    //         select: 'name email image status' // Select specific fields
-    //     }
-    // });
-
-    // if not convo
-
     if (!convos) createHttpError.BadRequest("Oooops something went wrong");
 
     // 1. if convo exist then check the latest message sender
