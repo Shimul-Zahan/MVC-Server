@@ -6,7 +6,7 @@ const SocketServer = (socket, io) => {
         socket.join(user)
         // add joined user to online user
         if (!onlineUsers.some((u) => u.userId === user)) {
-            console.log(`user ${user} now online`);
+            // console.log(`user ${user} now online`);
             onlineUsers.push({ userId: user, socketId: socket.id })
         }
         // send online users
@@ -51,7 +51,7 @@ const SocketServer = (socket, io) => {
         socket.in(conversation).emit("stop typing", conversation)
     })
 
-    //!--------calling system here----------
+    //?--------calling system here----------
     socket.on('call user', (data) => {
         console.log(data);
         let userId = data.userToCall;
@@ -66,6 +66,17 @@ const SocketServer = (socket, io) => {
             image: data.image,
             // socket id for whom we want to call
         })
+    })
+
+    //?--------answer call system here----------
+    socket.on('answer call', (data) => {
+        io.to(data.to).emit("call accepted", data.signal)
+    })
+
+
+    //?------------end call-------------
+    socket.on('end call', (id) => {
+        io.to(id).emit("call ended")
     })
 };
 
