@@ -74,6 +74,46 @@ const getAllConversationForAUser = async (req, res, next) => {
 
 }
 
+const createGroup = async (req, res, next) => {
+    try {
+        const { name, users } = req.body
+        // add mine to the users list
+        users.push(req.user.userId)
+
+        console.log(name, users, "for group convo");
+
+        if (!name || !users) {
+            throw createHttpError.BadRequest("Please fill all fields")
+        }
+        if (users.lenght < 2) {
+            throw createHttpError.BadRequest("Add atleast 2 users to the group")
+        }
+        let groupData = {
+            name,
+            users,
+            isGroup: true,
+            admin: req.user.userId,
+            picture: 'https://cdn.pixabay.com/photo/2020/05/29/13/26/icons-5235125_1280.png',
+        }
+
+        let group = await ConversationModel.create(groupData)
+        if (!group) {
+            throw createHttpError.BadRequest("Failed to create group")
+        }
 
 
-module.exports = { create_open_conversation, getAllConversationForAUser }
+        const populated_convo = await populateConversation(
+            group._id,
+            "users admin",
+            "-password"
+        )
+        console.log(populated_convo);
+        res.status(200).json(populated_convo)
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+module.exports = { create_open_conversation, getAllConversationForAUser, createGroup }
