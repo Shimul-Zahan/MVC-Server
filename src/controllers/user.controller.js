@@ -4,6 +4,7 @@ const searchUserService = require("../services/user.service")
 const searchUsers = async (req, res, next) => {
     try {
         const keyword = req.query.search
+        console.log(keyword, "keyword for search");
         if (!keyword) {
             console.log("no keyword found");
             throw createHttpError.BadRequest("No keyword found")
