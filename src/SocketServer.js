@@ -6,23 +6,25 @@ const SocketServer = (socket, io) => {
         socket.join(user)
         // add joined user to online user
         if (!onlineUsers.some((u) => u.userId === user)) {
-            console.log(`user ${user} now online`);
+            // console.log(`user ${user} now online`);
             onlineUsers.push({ userId: user, socketId: socket.id })
         }
         // send online users
         io.emit('get online users', onlineUsers)
+        io.emit('setup socket', socket.id)
     })
+
     // io use for always get this online user info
     // socket / offline/  is offline
     socket.on('disconnect', () => {
         onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id)
-        console.log('user diconnect now');
+        // console.log('user diconnect now');
         io.emit('get online users', onlineUsers)
     })
 
     // join a conversation room
     socket.on('join conversation', (conversation) => {
-        console.log(conversation);
+        // console.log(conversation);
         socket.join(conversation)
     })
 
@@ -47,6 +49,34 @@ const SocketServer = (socket, io) => {
     socket.on('stop typing', (conversation) => {
         // console.log('stop typing', conversation);
         socket.in(conversation).emit("stop typing", conversation)
+    })
+
+    //?--------calling system here----------
+    socket.on('call user', (data) => {
+        console.log(data);
+        let userId = data.userToCall;
+        // online users have socketId and userId
+        let userSocketIdToCall = onlineUsers.find((user) => user.userId == userId)
+        io.to(userSocketIdToCall.socketId).emit('call user', {
+            // the user whom are you call
+            signal: data.signal,
+            // who are calling or initially me
+            from: data.from,
+            name: data.name,
+            image: data.image,
+            // socket id for whom we want to call
+        })
+    })
+
+    //?--------answer call system here----------
+    socket.on('answer call', (data) => {
+        io.to(data.to).emit("call accepted", data.signal)
+    })
+
+
+    //?------------end call-------------
+    socket.on('end call', (id) => {
+        io.to(id).emit("call ended")
     })
 };
 
