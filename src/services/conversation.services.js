@@ -30,11 +30,10 @@ const doesConversationExist = async (sender_id, receiver_id, isGroup) => {
         return convos[0]
 
     } else {
-        let convo = await ConversationModel.find(
+        let convo = await ConversationModel.findOne(
             {
                 _id: isGroup,
                 isGroup: true,
-
             }
         )
             .populate("users admin", '-password')
