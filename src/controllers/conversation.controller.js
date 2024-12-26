@@ -22,7 +22,11 @@ const create_open_conversation = async (req, res, next) => {
             }
 
             // check if chat/ convo exist or not
-            const existed_convo = await doesConversationExist(sender_id, receiver_id)
+            const existed_convo = await doesConversationExist(
+                sender_id,
+                receiver_id,
+                false,
+            )
 
             // if chat or convo exist
             if (existed_convo) {
@@ -60,7 +64,14 @@ const create_open_conversation = async (req, res, next) => {
         } else {
 
             //this is for group conversation
-            console.log("This is group chat");
+            // check if chat/ convo exist or not
+            const existedGroupConvo = await doesConversationExist(
+                "",
+                "",
+                isGroup,
+            )
+
+            console.log(existedGroupConvo);
         }
 
     } catch (error) {
