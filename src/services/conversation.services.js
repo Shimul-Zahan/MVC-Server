@@ -28,8 +28,27 @@ const doesConversationExist = async (sender_id, receiver_id, isGroup) => {
 
         // cause convo is an array
         return convos[0]
+
     } else {
-        // if it there group conversation
+        let convo = await ConversationModel.find(
+            {
+                _id: isGroup,
+                isGroup: true,
+
+            }
+        )
+            .populate("users admin", '-password')
+            .populate("latestMessage")
+
+        if (!convo) createHttpError.BadRequest("Oooops something went wrong");
+
+        convo = await UserModel.populate(convo, {
+            path: 'latestMessage.sender',
+            select: "name email image status"
+        })
+
+        // cause convo is an array
+        return convo
     }
 }
 
