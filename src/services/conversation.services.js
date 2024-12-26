@@ -2,42 +2,35 @@ const createHttpError = require("http-errors")
 const ConversationModel = require("../models/conversation.model");
 const UserModel = require("../models/user.model");
 
-const doesConversationExist = async (sender_id, receiver_id) => {
-    let convos = await ConversationModel.find({
-        isGroup: false,
-        // check there is any convo between them
-        $and: [
-            { users: { $elemMatch: { $eq: sender_id } } },
-            { users: { $elemMatch: { $eq: receiver_id } } },
-        ]
-    })
-        // populate this users and the latest message
-        .populate("users", '-password')
-        .populate("latestMessage")
+const doesConversationExist = async (sender_id, receiver_id, isGroup) => {
+    if (isGroup == false) {
+        let convos = await ConversationModel.find({
+            isGroup: false,
+            // check there is any convo between them
+            $and: [
+                { users: { $elemMatch: { $eq: sender_id } } },
+                { users: { $elemMatch: { $eq: receiver_id } } },
+            ]
+        })
+            // populate this users and the latest message
+            .populate("users", '-password')
+            .populate("latestMessage")
 
-    // .populate("users", '-password')          // Populate user details excluding password
-    // .populate({
-    //     path: 'latestMessage',                // Populate latest message
-    //     populate: {
-    //         path: 'sender',                   // Populate sender details inside latestMessage
-    //         select: 'name email image status' // Select specific fields
-    //     }
-    // });
+        if (!convos) createHttpError.BadRequest("Oooops something went wrong");
 
-    // if not convo
+        // 1. if convo exist then check the latest message sender
+        // 2. Populate message model
 
-    if (!convos) createHttpError.BadRequest("Oooops something went wrong");
+        convos = await UserModel.populate(convos, {
+            path: 'latestMessage.sender',
+            select: "name email image status"
+        })
 
-    // 1. if convo exist then check the latest message sender
-    // 2. Populate message model
-
-    convos = await UserModel.populate(convos, {
-        path: 'latestMessage.sender',
-        select: "name email image status"
-    })
-
-    // cause convo is an array
-    return convos[0]
+        // cause convo is an array
+        return convos[0]
+    } else {
+        // if it there group conversation
+    }
 }
 
 const populateConversation = async (id, fieldToPopulaate, fieldsToRemove) => {
