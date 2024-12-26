@@ -30,6 +30,7 @@ const create_open_conversation = async (req, res, next) => {
 
             // if chat or convo exist
             if (existed_convo) {
+                // console.log(existed_convo, "existed convo");
                 res.json(existed_convo)
             } else {
 
@@ -57,23 +58,20 @@ const create_open_conversation = async (req, res, next) => {
                     // which field we don't populate
                     "-password"
                 )
-
                 res.json(populateConvoUserDetails)
-
             }
         } else {
 
             //this is for group conversation
             // check if chat/ convo exist or not
             const existedGroupConvo = await doesConversationExist(
-                "",
-                "",
+                null,
+                null,
                 isGroup,
             )
 
-            console.log(existedGroupConvo);
+            res.status(200).json(existedGroupConvo)
         }
-
     } catch (error) {
         next(error)
     }
