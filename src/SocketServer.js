@@ -11,6 +11,8 @@ const SocketServer = (socket, io) => {
         }
         // send online users
         io.emit('get online users', onlineUsers)
+
+        // send socket id for calling
         io.emit('setup socket', socket.id)
     })
 
@@ -53,7 +55,6 @@ const SocketServer = (socket, io) => {
 
     //?--------calling system here----------
     socket.on('call user', (data) => {
-        console.log(data);
         let userId = data.userToCall;
         // online users have socketId and userId
         let userSocketIdToCall = onlineUsers.find((user) => user.userId == userId)
