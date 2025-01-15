@@ -79,6 +79,12 @@ const SocketServer = (socket, io) => {
     socket.on('end call', (id) => {
         io.to(id).emit("call ended")
     })
+
+
+    // for ice candidates
+    socket.on("candidate", (data) => {
+        console.log(data, "data here");
+    })
 };
 
 module.exports = SocketServer;
